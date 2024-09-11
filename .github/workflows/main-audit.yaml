@@ -1,8 +1,11 @@
-name: 'Main PR: verify'
+# .github/workflows/stale-branches.yml
+
+name: 'Audit Dependencies Periodically'
 
 on:
-  pull_request:
-    branches: [main]
+  schedule:
+    - cron: '0 7 * * 1' # Every Monday at 7am
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -10,7 +13,7 @@ concurrency:
 
 jobs:
   build:
-    name: Build and Test
+    name: Audit Dependencies
     timeout-minutes: 10
     runs-on: ubuntu-latest
 
@@ -26,14 +29,5 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Audit critical dependency vulnerabilities
+      - name: Audit critical vulnerabilities
         run: npm run audit:critical
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Build
-        run: npm run build
-
-      - name: Tests
-        run: npm run test

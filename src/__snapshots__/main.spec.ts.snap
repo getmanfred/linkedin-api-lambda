@@ -1,0 +1,60 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Linkedin lambda handler should handle message and return a response with Linkedin Profile as Mac Profile 1`] = `
+LinkedinProfileResponse {
+  "mac": LinkedinProfileResponseMac {
+    "$schema": "https://raw.githubusercontent.com/getmanfred/mac/v0.5/schema/schema.json",
+    "aboutMe": LinkedinProfileResponseMacAboutMe {
+      "profile": LinkedinProfileResponseMacPerson {
+        "description": "I like to learn new things every day",
+        "title": "Software Engineer @Manfred",
+      },
+    },
+    "experience": LinkedinProfileResponseMacExperience {
+      "jobs": [
+        LinkedinProfileResponseMacJob {
+          "organization": LinkedinProfileResponseMacPublicEntity {
+            "name": "Manfred",
+          },
+          "roles": [
+            LinkedinProfileResponseMacJobRole {
+              "challenges": [
+                LinkedinProfileResponseMacExperienceJobChallenge {
+                  "description": "Product development implemented in Node, Express, Nest.js, Typescript, Postgres, Kubernetes, AWS: SQS, Lambda, S3...",
+                },
+              ],
+              "finishDate": "2026-03-01",
+              "name": "Senior Backend Developer",
+              "startDate": "2022-03-01",
+            },
+          ],
+        },
+      ],
+    },
+    "knowledge": LinkedinProfileResponseMacKnowledge {
+      "hardSkills": [
+        LinkedinProfileResponseMacSkill {
+          "skill": LinkedinProfileResponseMacCompetence {
+            "name": "TypeScript",
+            "type": "technology",
+          },
+        },
+      ],
+      "studies": [
+        LinkedinProfileResponseMacStudy {
+          "degreeAchieved": true,
+          "description": "Computer Engineering",
+          "finishDate": "2012-01-01",
+          "name": "Computer Engineering",
+          "startDate": "2005-01-01",
+          "studyType": "officialDegree",
+        },
+      ],
+    },
+    "settings": LinkedinProfileResponseMacSettings {
+      "language": "EN",
+    },
+  },
+  "result": "success",
+}
+`;

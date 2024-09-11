@@ -1,11 +1,25 @@
 import { Handler, SQSEvent } from 'aws-lambda';
-import { logger } from './util/logging';
+import 'reflect-metadata';
+import { LinkedinProfileResponse } from './contracts/linkedin-profile.response';
+import { LinkedinProfileRequestMapper } from './mappers/linkedin-profile.request.mapper';
+import { LinkedinProfileResponseMapper } from './mappers/linkedin-profile.response.mapper';
+import { LinkedinProfileService } from './services/linkedin-profile.service';
+import { Environment } from './util/environment';
+import { logger } from './util/logger';
 
-export const handler: Handler = async (event: SQSEvent): Promise<void> => {
+export const handler: Handler = async (event: SQSEvent): Promise<LinkedinProfileResponse> => {
   try {
-    // TODO: Implement your logic here
-    // validate env variables
-    logger.debug('Event:', event);
+    const linkedinProfileRequest = LinkedinProfileRequestMapper.toDomain(event);
+    Environment.setupEnvironment(linkedinProfileRequest);
+
+    const linkedinProfile = await new LinkedinProfileService().getLinkedinProfile(linkedinProfileRequest.profileApiToken);
+    const linkedinProfileResponse = LinkedinProfileResponseMapper.toResponse(linkedinProfile);
+
+    logger.info(`✅ [handler] Linkedin profile response with MAC: ${JSON.stringify(linkedinProfileResponse.mac)}`);
+
+    // TODO: send response to SQS queue
+
+    return linkedinProfileResponse;
   } catch (error) {
     throw error;
   }
