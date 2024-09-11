@@ -1,0 +1,28 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+
+# Operating system and environment-specific files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env*
+!.env.example
+
+# Build output directories
+/dist
+
+# Test coverage results
+coverage/
+
+# Temporary or configuration files for code editors
+*.sublime-workspace
+.idea/
+.vscode/
+*.swp
+*.tmp
+*.bak
+
+# Test and coverage system output
+.nyc_output

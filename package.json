@@ -1,0 +1,36 @@
+{
+  "name": "linkedin-api-lambda",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node -r esbuild-register ./src/index.ts",
+    "lint": "eslint src/**/*.ts* --fix",
+    "test": "jest --silent --logHeapUsage --coverage",
+    "dev": "node -r esbuild-register ./src/launch.ts -e .ts",
+    "dev:secrets": "doppler setup --no-interactive && doppler secrets download --no-file --format env > .env && touch .env.overrides && cat .env.overrides >> .env",
+    "audit:critical": "npm audit --audit-level=critical",
+    "clean": "rm -rf dist node_modules"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-lambda": "1.0.7",
+    "winston": "3.14.2"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "3.1.0",
+    "@eslint/js": "9.10.0",
+    "@types/aws-lambda": "8.10.145",
+    "@types/jest": "29.5.12",
+    "@types/node": "20.16.5",
+    "@typescript-eslint/eslint-plugin": "8.5.0",
+    "@typescript-eslint/parser": "8.5.0",
+    "esbuild-register": "3.6.0",
+    "eslint": "9.10.0",
+    "prettier": "3.3.3",
+    "prettier-plugin-sort-imports": "1.8.6",
+    "typescript": "5.5.4"
+  }
+}

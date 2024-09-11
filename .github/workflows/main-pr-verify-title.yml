@@ -1,0 +1,23 @@
+name: "Main PR: verify PR title"
+on:
+  pull_request:
+    branches: [main]
+    types:
+      - opened
+      - edited
+      - synchronize
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  PR-title-verify:
+    name: PR title verify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify
+        uses: Slashgear/action-check-pr-title@v4.3.0
+        with:
+          regexp: '(feat|fix|docs|build|chore|ci|style|refactor|perf|test): .+ \(((ASG-\d+ (#IN_PROGRESS|#DONE))|NOJIRA)\)'
+          helpMessage: 'Ex. "feat: my changes description (ASG-2 #DONE)" OR "feat: my changes description (NOJIRA)"' 
