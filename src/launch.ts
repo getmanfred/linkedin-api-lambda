@@ -1,6 +1,6 @@
 /* eslint-disable no-process-env */
 import { Context } from 'aws-lambda';
-import { handler } from './main';
+import { handler } from './index';
 import { createMockedLinkedinProfileRequest } from './test/mocks/linkedin-profile.mocks';
 import { createMockedSqsSEvent } from './test/mocks/sqs.mocks';
 import { logger } from './util/logger';

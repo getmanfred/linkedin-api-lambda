@@ -1,0 +1,16 @@
+services:
+  linkedin-api-lambda:
+    container_name: linkedin-api-lambda
+    image: linkedin-api-lambda:latest
+    build:
+      context: .
+      dockerfile: ./dockerfile
+    restart: always
+    ports:
+      - 9001:8080
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    external: true

@@ -1,0 +1,48 @@
+name: '🚀 Publish Linkedin API Lambda image'
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish-image:
+    name: Push image to ECR and update Lambda
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.17.0
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          # Created the Secrets Under the Repo only with These Variables
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Build image
+        run: |
+          aws ecr get-login-password --region ${{ secrets.AWS_REGION }}  | docker login --username AWS --password-stdin ${{ secrets.ECR_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+          COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker compose -f docker-compose.yml build linkedin-api-lambda
+
+      - name: Push image
+        run: |
+          docker tag linkedin-api-lambda:latest ${{ secrets.ECR_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/linkedin-api-lambda:v1.${GITHUB_RUN_NUMBER}
+          docker tag linkedin-api-lambda:latest ${{ secrets.ECR_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/linkedin-api-lambda:latest
+          docker push ${{ secrets.ECR_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/linkedin-api-lambda --all-tags
+          aws lambda update-function-code --function-name linkedin-api-lambda --image-uri ${{ secrets.ECR_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/linkedin-api-lambda:v1.${GITHUB_RUN_NUMBER}
+
+  previous-step-fail:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - run: echo "CI failed - not pushing manfredite-airtable-update image to ECR"
