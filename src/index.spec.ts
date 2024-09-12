@@ -1,6 +1,6 @@
 import { Context } from 'aws-lambda';
 import { mock, mockReset } from 'jest-mock-extended';
-import { handler } from './main';
+import { handler } from './index';
 import { LinkedinProfileService } from './services/linkedin-profile.service';
 import {
   createMockedLinkedinProfile,
