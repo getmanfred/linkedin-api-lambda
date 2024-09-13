@@ -4,7 +4,7 @@ FROM node:20.17.0-alpine AS builder
 WORKDIR /app
 
 COPY package*.json /app/
-RUN npm install --production
+RUN npm install
 
 COPY . /app
 RUN npm run build
@@ -14,7 +14,6 @@ FROM public.ecr.aws/lambda/nodejs:20 AS runner
 
 WORKDIR /var/task
 
-# Copiar el contenido de dist
 COPY --from=builder /app/dist/ ./
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package*.json ./
