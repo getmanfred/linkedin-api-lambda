@@ -11,6 +11,7 @@ export const handler: Handler = async (event: SQSEvent): Promise<LinkedinProfile
   try {
     const linkedinProfileRequest = LinkedinProfileRequestMapper.toDomain(event);
     Environment.setupEnvironment(linkedinProfileRequest);
+    logger.info(`⌛️ [handler] Starting Linkedin profile request for linkedinUrl: ${linkedinProfileRequest.linkedinUrl}`);
 
     const linkedinProfile = await new LinkedinProfileService().getLinkedinProfile(linkedinProfileRequest.profileApiToken);
     const linkedinProfileResponse = LinkedinProfileResponseMapper.toResponse(linkedinProfile);

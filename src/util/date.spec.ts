@@ -1,35 +1,45 @@
 import { DateUtilities } from './date';
 
-describe('date utities', () => {
+describe('date utilities', () => {
+  beforeAll(() => {
+    jest.useFakeTimers().setSystemTime(new Date('2023-10-01'));
+  });
+
+  afterAll(() => {
+    jest.useRealTimers();
+  });
+
   describe('when calling toIsoDate', () => {
-    it('should return the date in ISO format with `MMM yyyy` format', () => {
+    it('should correctly format a date in `MMM yyyy` format to ISO format', () => {
       const date = 'Mar 2026';
       const expected = '2026-03-01';
 
-      const result = DateUtilities.toIsoDate(date, 'MMM yyyy');
+      const result = DateUtilities.toIsoDate(date);
       expect(result).toBe(expected);
     });
 
-    it('should return the date in ISO format with `yyyy` format', () => {
+    it('should correctly format a date in `yyyy` format to ISO format', () => {
       const date = '2026';
       const expected = '2026-01-01';
 
-      const result = DateUtilities.toIsoDate(date, 'yyyy');
+      const result = DateUtilities.toIsoDate(date);
       expect(result).toBe(expected);
     });
 
-    it('should return undefined when the date is not provided', () => {
+    it("should return today's date in ISO format when the date is not provided", () => {
       const date = undefined;
+      const expected = '2023-10-01';
 
-      const result = DateUtilities.toIsoDate(date, 'MMM yyyy');
-      expect(result).toBeUndefined();
+      const result = DateUtilities.toIsoDate(date);
+      expect(result).toBe(expected);
     });
 
-    it('should return undefined when the date is not valid', () => {
+    it("should return today's date in ISO format when the date is invalid", () => {
       const date = 'invalid date';
+      const expected = '2023-10-01';
 
-      const result = DateUtilities.toIsoDate(date, 'MMM yyyy');
-      expect(result).toBeUndefined();
+      const result = DateUtilities.toIsoDate(date);
+      expect(result).toBe(expected);
     });
   });
 });

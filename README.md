@@ -50,7 +50,5 @@ Make sure you have all necessary environment variables and dependencies set up b
   - error handling, detect "empty" response (not yet connected)
   - measure time and return to storage in DB for metabase stats
   - more tests, integration test?
-- Github action to deploy in aws
 - Send result to SQS queue
 - Script to get linkedin token
-- Review dates parser: fallback MMM yyyy -> yyyy ?
