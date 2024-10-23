@@ -25,7 +25,10 @@ describe('Linkedin lambda handler', () => {
     const event = createMockedSqsSEvent();
     const expectedLinkedinProfile = createMockedLinkedinProfile();
 
-    linkedinProfileService.getLinkedinProfile.calledWith('fake-token').mockResolvedValue(expectedLinkedinProfile);
+    linkedinProfileService.getLinkedinProfile.calledWith('fake-token').mockResolvedValue({
+      linkedinProfile: expectedLinkedinProfile,
+      isEmptyProfile: false
+    });
 
     const response = await handler(event, {} as Context, () => {});
 
@@ -58,7 +61,10 @@ describe('Linkedin lambda handler', () => {
     const expectedErrorString =
       '[LinkedinProfileResponseMapper] MAC Validation failed: ["property: mac.aboutMe.profile.title errors: title should not be empty"]';
 
-    linkedinProfileService.getLinkedinProfile.calledWith('fake-token').mockResolvedValue(expectedLinkedinProfile);
+    linkedinProfileService.getLinkedinProfile.calledWith('fake-token').mockResolvedValue({
+      linkedinProfile: expectedLinkedinProfile,
+      isEmptyProfile: false
+    });
 
     await expect(handler(event, {} as Context, () => {})).rejects.toThrow(new Error(expectedErrorString));
   });

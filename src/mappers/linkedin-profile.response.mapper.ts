@@ -64,8 +64,8 @@ export class LinkedinProfileResponseMapper {
 
         const role = new LinkedinProfileResponseMacJobRole();
         role.name = position.Title || '';
-        role.startDate = DateUtilities.toIsoDate(position['Started On'], 'MMM yyyy') || new Date().toISOString();
-        role.finishDate = position['Finished On'] ? DateUtilities.toIsoDate(position['Finished On'], 'MMM yyyy') : undefined;
+        role.startDate = DateUtilities.toIsoDate(position['Started On']);
+        role.finishDate = position['Finished On'] ? DateUtilities.toIsoDate(position['Finished On']) : undefined;
 
         const challenge = new LinkedinProfileResponseMacExperienceJobChallenge();
         challenge.description = position.Description || '';
@@ -95,8 +95,8 @@ export class LinkedinProfileResponseMapper {
       const study = new LinkedinProfileResponseMacStudy();
       study.studyType = 'officialDegree';
       study.name = educationItem['Degree Name'] || educationItem['School Name'] || '';
-      study.startDate = DateUtilities.toIsoDate(educationItem['Start Date'], 'yyyy') || new Date().toISOString();
-      study.finishDate = educationItem['End Date'] ? DateUtilities.toIsoDate(educationItem['End Date'], 'yyyy') : undefined;
+      study.startDate = DateUtilities.toIsoDate(educationItem['Start Date']);
+      study.finishDate = educationItem['End Date'] ? DateUtilities.toIsoDate(educationItem['End Date']) : undefined;
       study.degreeAchieved = !!educationItem['End Date'];
       study.description = educationItem['Degree Name'] || educationItem['School Name'];
       if (educationItem['School Name']) {
@@ -111,7 +111,6 @@ export class LinkedinProfileResponseMapper {
   private static validate(response: LinkedinProfileResponse): void {
     const errors = validateSync(response);
     if (errors.length > 0) {
-      console.log(JSON.stringify(response.mac, null, 2));
       logger.error(`[LinkedinProfileResponseMapper] MAC Validation failed: ${JSON.stringify(errors)}`, { errors, response });
       const formattedErrors = ValidationUtilities.formatErrors(errors);
       throw new Error(`[LinkedinProfileResponseMapper] MAC Validation failed: ${JSON.stringify(formattedErrors)}`);

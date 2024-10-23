@@ -29,7 +29,7 @@ describe('A linkedin api client', () => {
       return undefined;
     });
 
-    const education = await client.fetchProfileDomainData('fake_token', 'EDUCATION');
+    const education = await client.fetchProfileDomainData('fake_token', 'EDUCATION', 'ARRAY');
 
     expect(education).toEqual(expectedEducation);
   });
