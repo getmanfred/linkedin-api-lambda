@@ -19,13 +19,23 @@ describe('A linkedin profile service', () => {
   it('should get linkedin profile using client', async () => {
     const expectedProfile = createMockedLinkedinProfile();
 
-    client.fetchProfileDomainData.calledWith('fake_token', 'PROFILE').mockResolvedValue(expectedProfile.profile);
-    client.fetchProfileDomainData.calledWith('fake_token', 'SKILLS').mockResolvedValue(expectedProfile.skills);
-    client.fetchProfileDomainData.calledWith('fake_token', 'POSITIONS').mockResolvedValue(expectedProfile.positions);
-    client.fetchProfileDomainData.calledWith('fake_token', 'EDUCATION').mockResolvedValue(expectedProfile.education);
+    client.fetchProfileDomainData.calledWith('fake_token', 'PROFILE', 'OBJECT').mockResolvedValue(expectedProfile.profile);
+    client.fetchProfileDomainData.calledWith('fake_token', 'SKILLS', 'ARRAY').mockResolvedValue(expectedProfile.skills);
+    client.fetchProfileDomainData.calledWith('fake_token', 'POSITIONS', 'ARRAY').mockResolvedValue(expectedProfile.positions);
+    client.fetchProfileDomainData.calledWith('fake_token', 'EDUCATION', 'ARRAY').mockResolvedValue(expectedProfile.education);
 
-    const profile = await service.getLinkedinProfile('fake_token');
+    const { linkedinProfile, isEmptyProfile } = await service.getLinkedinProfile('fake_token');
+    expect(linkedinProfile).toEqual(expectedProfile);
+    expect(isEmptyProfile).toBe(false);
+  });
 
-    expect(profile).toEqual(expectedProfile);
+  it('should return empty profile flag', async () => {
+    client.fetchProfileDomainData.calledWith('fake_token', 'PROFILE', 'OBJECT').mockResolvedValue({});
+    client.fetchProfileDomainData.calledWith('fake_token', 'SKILLS', 'ARRAY').mockResolvedValue([]);
+    client.fetchProfileDomainData.calledWith('fake_token', 'POSITIONS', 'ARRAY').mockResolvedValue([]);
+    client.fetchProfileDomainData.calledWith('fake_token', 'EDUCATION', 'ARRAY').mockResolvedValue([]);
+
+    const { isEmptyProfile } = await service.getLinkedinProfile('fake_token');
+    expect(isEmptyProfile).toBe(true);
   });
 });
