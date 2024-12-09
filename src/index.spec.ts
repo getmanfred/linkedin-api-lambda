@@ -46,10 +46,10 @@ describe('Linkedin lambda handler', () => {
 
   it('should throw an error if message is not a valid LinkedinProfileRequest', async () => {
     const request = createMockedLinkedinProfileRequest();
-    request.profileApiToken = undefined as unknown as string; // missing required field
+    request.linkedinApiToken = undefined as unknown as string; // missing required field
     const event = createMockedSqsSEvent(request);
     const expectedErrorString =
-      '[LinkedinProfileRequestMapper] Validation failed: ["property: profileApiToken errors: profileApiToken must be a string"]';
+      '[LinkedinProfileRequestMapper] Validation failed: ["property: linkedinApiToken errors: linkedinApiToken must be a string"]';
 
     await expect(handler(event, {} as Context, () => {})).rejects.toThrow(new Error(expectedErrorString));
   });

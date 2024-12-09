@@ -6,16 +6,16 @@ import { setContextLogger } from './logger';
 
 export class Environment {
   public readonly LOGGER_CONSOLE: boolean;
-  public readonly LOCAL_PROFILE_API_TOKEN?: string;
+  public readonly LOCAL_LINKEDIN_API_TOKEN?: string;
 
   private constructor(_envName: EnvironmentType) {
     const env = cleanEnv(process.env, {
       LOGGER_CONSOLE: bool({ default: false }),
-      LOCAL_PROFILE_API_TOKEN: str({ default: undefined })
+      LOCAL_LINKEDIN_API_TOKEN: str({ default: undefined })
     });
 
     this.LOGGER_CONSOLE = env.LOGGER_CONSOLE;
-    this.LOCAL_PROFILE_API_TOKEN = env.LOCAL_PROFILE_API_TOKEN ?? undefined;
+    this.LOCAL_LINKEDIN_API_TOKEN = env.LOCAL_LINKEDIN_API_TOKEN ?? undefined;
   }
 
   public static setupEnvironment(request: LinkedinProfileRequest): Environment {
