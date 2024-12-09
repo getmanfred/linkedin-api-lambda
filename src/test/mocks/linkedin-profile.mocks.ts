@@ -4,12 +4,12 @@ import { LinkedinProfile } from '../../domain/linkedin-profile';
 export const createMockedLinkedinProfileRequest = (customValues: Partial<LinkedinProfileRequest> = {}): LinkedinProfileRequest => {
   const request = new LinkedinProfileRequest();
   request.messageId = customValues.messageId ?? '059f36b4-87a3-44ab-83d2-661975830a7d';
+  request.importId = customValues.importId ?? '1';
   request.contextId = customValues.contextId ?? '1234';
   request.env = customValues.env ?? 'local';
   request.profileId = customValues.profileId ?? 123;
-  request.profileApiToken = customValues.profileApiToken ?? 'fake-token';
-  request.linkedinUrl = customValues.linkedinUrl ?? 'https://www.linkedin.com/in/username';
-  request.attempt = customValues.attempt ?? 1;
+  request.linkedinApiToken = customValues.linkedinApiToken ?? 'fake-token';
+  request.linkedinProfileUrl = customValues.linkedinProfileUrl ?? 'https://www.linkedin.com/in/username';
   return request;
 };
 

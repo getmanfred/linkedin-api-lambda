@@ -11,12 +11,18 @@ export const handler: Handler = async (event: SQSEvent): Promise<LinkedinProfile
   try {
     const linkedinProfileRequest = LinkedinProfileRequestMapper.toDomain(event);
     Environment.setupEnvironment(linkedinProfileRequest);
-    logger.info(`⌛️ [handler] Starting Linkedin profile request for linkedinUrl: ${linkedinProfileRequest.linkedinUrl}`, linkedinProfileRequest);
+    logger.info(
+      `⌛️ [handler] Starting Linkedin profile request for linkedinProfileUrl: ${linkedinProfileRequest.linkedinProfileUrl}`,
+      linkedinProfileRequest
+    );
 
-    const { linkedinProfile, isEmptyProfile } = await new LinkedinProfileService().getLinkedinProfile(linkedinProfileRequest.profileApiToken);
+    const { linkedinProfile, isEmptyProfile } = await new LinkedinProfileService().getLinkedinProfile(linkedinProfileRequest.linkedinApiToken);
 
     if (isEmptyProfile) {
-      logger.warn(`👻 [handler] Linkedin profile is not synced for linkedinUrl: ${linkedinProfileRequest.linkedinUrl}`, linkedinProfileRequest);
+      logger.warn(
+        `👻 [handler] Linkedin profile is not synced for linkedinProfileUrl: ${linkedinProfileRequest.linkedinProfileUrl}`,
+        linkedinProfileRequest
+      );
       // TODO: send response to SQS queue again if no max retries
       return undefined;
     }
@@ -27,7 +33,7 @@ export const handler: Handler = async (event: SQSEvent): Promise<LinkedinProfile
 
     return linkedinProfileResponse;
   } catch (error) {
-    logger.error(`❌ [handler] Error processing Linkedin profile request: ${error}`, error);
+    logger.error(`❌ [handler] Error processing Linkedin profile request`, { error, event });
     throw error;
   }
 };

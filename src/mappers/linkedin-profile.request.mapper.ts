@@ -10,12 +10,12 @@ export class LinkedinProfileRequestMapper {
 
     const request = new LinkedinProfileRequest();
     request.messageId = message.messageId;
+    request.importId = messageBody.importId;
     request.contextId = messageBody.contextId;
     request.env = messageBody.env;
-    request.profileId = messageBody.profileId;
-    request.profileApiToken = messageBody.profileApiToken;
-    request.linkedinUrl = messageBody.linkedinUrl;
-    request.attempt = messageBody.attempt;
+    request.profileId = +messageBody.profileId;
+    request.linkedinApiToken = messageBody.linkedinApiToken;
+    request.linkedinProfileUrl = messageBody.linkedinProfileUrl;
 
     this.validate(request);
 

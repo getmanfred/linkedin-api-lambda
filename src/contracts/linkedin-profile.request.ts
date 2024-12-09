@@ -1,8 +1,11 @@
-import { IsIn, IsInt, IsNumber, IsString, IsUrl, Min } from 'class-validator';
+import { IsIn, IsInt, IsNumber, IsString, IsUrl } from 'class-validator';
 
 export class LinkedinProfileRequest {
   @IsString()
   public messageId!: string;
+
+  @IsString()
+  public importId!: string;
 
   @IsString()
   public contextId!: string;
@@ -14,13 +17,10 @@ export class LinkedinProfileRequest {
   @IsInt()
   public profileId!: number;
 
+  // Profile parameters
   @IsString()
-  public profileApiToken!: string;
+  public linkedinApiToken!: string;
 
   @IsUrl()
-  public linkedinUrl!: string;
-
-  @IsInt()
-  @Min(1)
-  public attempt!: number;
+  public linkedinProfileUrl!: string;
 }

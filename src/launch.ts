@@ -7,8 +7,8 @@ import { logger } from './util/logger';
 
 // 👉 Fake manual execution without AWS: For local debug
 void (async (): Promise<void> => {
-  const profileApiToken = process.env['LOCAL_PROFILE_API_TOKEN'];
-  const request = createMockedLinkedinProfileRequest({ profileApiToken });
+  const linkedinApiToken = process.env['LOCAL_LINKEDIN_API_TOKEN'];
+  const request = createMockedLinkedinProfileRequest({ linkedinApiToken });
   const fakeEvent = createMockedSqsSEvent(request);
 
   logger.info('👉 [launch.ts] Debugging lambda handler  ...');
