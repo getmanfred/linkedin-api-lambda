@@ -1,4 +1,5 @@
 import { validateSync } from 'class-validator';
+import { LinkedinProfileRequest } from '../contracts/linkedin-profile.request';
 import {
   LinkedinProfileResponse,
   LinkedinProfileResponseMac,
@@ -13,6 +14,7 @@ import {
   LinkedinProfileResponseMacSkill,
   LinkedinProfileResponseMacStudy
 } from '../contracts/linkedin-profile.response';
+import { InvalidMacError } from '../domain/errors/invalid-mac.error';
 import {
   LinkedinProfile,
   LinkedinProfileEducation,
@@ -25,11 +27,34 @@ import { logger } from '../util/logger';
 import { ValidationUtilities } from '../util/validation';
 
 export class LinkedinProfileResponseMapper {
-  public static toResponse(linkedinProfile: LinkedinProfile): LinkedinProfileResponse {
+  public static toResponse(linkedinProfile: LinkedinProfile, request: LinkedinProfileRequest, timeElapsed: number): LinkedinProfileResponse {
     const response = new LinkedinProfileResponse();
 
-    response.result = 'success';
-    response.mac = this.toMac(linkedinProfile);
+    response.importId = request.importId;
+    response.contextId = request.contextId;
+    response.profileId = request.profileId;
+    response.timeElapsed = timeElapsed;
+
+    response.profile = this.toMac(linkedinProfile);
+
+    this.validate(response);
+
+    return response;
+  }
+
+  public static toErrorResponse(
+    errorType: LinkedinProfileResponse['errorType'],
+    errorMessage: string,
+    request: LinkedinProfileRequest
+  ): LinkedinProfileResponse {
+    const response = new LinkedinProfileResponse();
+
+    response.importId = request.importId;
+    response.contextId = request.contextId;
+    response.profileId = request.profileId;
+
+    response.errorType = errorType;
+    response.errorMessage = errorMessage;
 
     this.validate(response);
 
@@ -113,7 +138,7 @@ export class LinkedinProfileResponseMapper {
     if (errors.length > 0) {
       logger.error(`[LinkedinProfileResponseMapper] MAC Validation failed: ${JSON.stringify(errors)}`, { errors, response });
       const formattedErrors = ValidationUtilities.formatErrors(errors);
-      throw new Error(`[LinkedinProfileResponseMapper] MAC Validation failed: ${JSON.stringify(formattedErrors)}`);
+      throw new InvalidMacError(`[LinkedinProfileResponseMapper] MAC Validation failed: ${JSON.stringify(formattedErrors)}`);
     }
   }
 }

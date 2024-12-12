@@ -13,7 +13,8 @@ export class LinkedinProfileService {
 
   public constructor() {}
 
-  public async getLinkedinProfile(token: string): Promise<{ linkedinProfile: LinkedinProfile; isEmptyProfile: boolean }> {
+  public async getLinkedinProfile(token: string): Promise<{ linkedinProfile: LinkedinProfile; isEmptyProfile: boolean; timeElapsed: number }> {
+    const startTime = Date.now();
     const profile = await this.client.fetchProfileDomainData<LinkedinProfileProfile>(token, 'PROFILE', 'OBJECT');
     const skills = await this.client.fetchProfileDomainData<LinkedinProfileSkill[]>(token, 'SKILLS', 'ARRAY');
     const positions = await this.client.fetchProfileDomainData<LinkedinProfilePosition[]>(token, 'POSITIONS', 'ARRAY');
@@ -21,9 +22,10 @@ export class LinkedinProfileService {
 
     const linkedinProfile = { profile, skills, positions, education };
     const isEmptyProfile = this.isEmptyProfile(profile);
+    const timeElapsed = (Date.now() - startTime) / 1000;
     logger.debug(`🧐 [LinkedinProfileService] Linkedin profile retrieved: ${JSON.stringify(linkedinProfile)}`);
 
-    return { linkedinProfile, isEmptyProfile };
+    return { linkedinProfile, isEmptyProfile, timeElapsed };
   }
 
   // --- 🔐 Private methods

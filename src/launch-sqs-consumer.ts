@@ -14,8 +14,9 @@ const queueUrl = 'http://localhost:4566/000000000000/linkedin-api-import-profile
 
 const consumer = Consumer.create({
   queueUrl,
+  alwaysAcknowledge: true,
   handleMessage: async (message: Message) => {
-    logger.info('👉  Message received:', message);
+    logger.info(`👉  Message received from queue with mesageId: ${message.MessageId}:`, message);
 
     try {
       const sqsRecord = {
@@ -32,13 +33,13 @@ const consumer = Consumer.create({
 
       const event = { Records: [sqsRecord] } as SQSEvent;
 
-      const response = await handler(event, {} as Context, () => {
-        logger.info('✅  Executed handler');
-      });
+      const response = await handler(event, {} as Context, () => {});
 
+      logger.info(`🏁 Message processed successfully with messageId: ${message.MessageId}`);
       return response;
     } catch (error) {
       logger.error('❌  Error handling message:', error);
+      throw error;
     }
   },
   sqs: sqsClient

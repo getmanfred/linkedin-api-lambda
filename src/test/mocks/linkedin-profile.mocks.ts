@@ -7,9 +7,10 @@ export const createMockedLinkedinProfileRequest = (customValues: Partial<Linkedi
   request.importId = customValues.importId ?? '1';
   request.contextId = customValues.contextId ?? '1234';
   request.env = customValues.env ?? 'local';
-  request.profileId = customValues.profileId ?? 123;
+  request.profileId = customValues.profileId ?? 356;
   request.linkedinApiToken = customValues.linkedinApiToken ?? 'fake-token';
   request.linkedinProfileUrl = customValues.linkedinProfileUrl ?? 'https://www.linkedin.com/in/username';
+  request.attempt = customValues.attempt ?? 1;
   return request;
 };
 

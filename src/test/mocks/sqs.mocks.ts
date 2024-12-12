@@ -3,7 +3,7 @@ import { LinkedinProfileRequest } from '../../contracts/linkedin-profile.request
 import { createMockedLinkedinProfileRequest } from './linkedin-profile.mocks';
 
 export const createMockedSqsSEvent = (customRequest?: Partial<LinkedinProfileRequest>): SQSEvent => {
-  const request = customRequest || createMockedLinkedinProfileRequest();
+  const request = customRequest ?? createMockedLinkedinProfileRequest();
   const event = {
     Records: [
       {

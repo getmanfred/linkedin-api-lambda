@@ -1,12 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Linkedin lambda handler should handle message and return a response with Linkedin Profile as Mac Profile 1`] = `
+exports[`Linkedin lambda handler when handling a successful request should return a response with Linkedin Profile as Mac Profile 1`] = `
 LinkedinProfileResponse {
-  "mac": LinkedinProfileResponseMac {
+  "contextId": "1234",
+  "importId": "1",
+  "profile": LinkedinProfileResponseMac {
     "$schema": "https://raw.githubusercontent.com/getmanfred/mac/v0.5/schema/schema.json",
     "aboutMe": LinkedinProfileResponseMacAboutMe {
       "profile": LinkedinProfileResponseMacPerson {
         "description": "I like to learn new things every day",
+        "name": "",
+        "surnames": "",
         "title": "Software Engineer @Manfred",
       },
     },
@@ -55,6 +59,7 @@ LinkedinProfileResponse {
       "language": "EN",
     },
   },
-  "result": "success",
+  "profileId": 356,
+  "timeElapsed": 1000,
 }
 `;
