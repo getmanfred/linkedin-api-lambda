@@ -6,6 +6,7 @@ import {
   IsDateString,
   IsIn,
   IsNotEmpty,
+  IsNumber,
   IsObject,
   IsOptional,
   IsString,
@@ -20,6 +21,12 @@ export class LinkedinProfileResponseMacSettings {
 }
 
 export class LinkedinProfileResponseMacPerson {
+  @IsString()
+  public name: string = '';
+
+  @IsString()
+  public surnames: string = '';
+
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
@@ -192,13 +199,33 @@ export class LinkedinProfileResponseMac {
   }
 }
 
+export type LinkedinProfileResponseErrorType = 'unknown' | 'account-locked' | 'timeout' | 'expired' | 'invalid-mac' | 'not-found';
+
 export class LinkedinProfileResponse {
   @IsString()
-  @IsIn(['success', 'error'])
-  public result!: 'success' | 'error';
+  public importId!: string;
 
+  @IsString()
+  public contextId!: string;
+
+  @IsNumber()
+  public profileId!: number;
+
+  @IsOptional()
+  @IsNumber()
+  public timeElapsed?: number;
+
+  @IsOptional()
   @IsObject()
   @ValidateNested()
   @Type(() => LinkedinProfileResponseMac)
-  public mac!: LinkedinProfileResponseMac;
+  public profile?: LinkedinProfileResponseMac;
+
+  @IsOptional()
+  @IsIn(['unknown', 'expired', 'invalid-mac', 'not-found', 'account-locked', 'timeout'])
+  public errorType?: LinkedinProfileResponseErrorType;
+
+  @IsOptional()
+  @IsString()
+  public errorMessage?: string;
 }

@@ -23,4 +23,7 @@ export class LinkedinProfileRequest {
 
   @IsUrl()
   public linkedinProfileUrl!: string;
+
+  @IsInt()
+  public attempt!: number;
 }

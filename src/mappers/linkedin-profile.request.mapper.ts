@@ -16,6 +16,7 @@ export class LinkedinProfileRequestMapper {
     request.profileId = +messageBody.profileId;
     request.linkedinApiToken = messageBody.linkedinApiToken;
     request.linkedinProfileUrl = messageBody.linkedinProfileUrl;
+    request.attempt = messageBody.attempt ? +messageBody.attempt : 1;
 
     this.validate(request);
 
