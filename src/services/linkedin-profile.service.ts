@@ -22,7 +22,7 @@ export class LinkedinProfileService {
 
     const linkedinProfile = { profile, skills, positions, education };
     const isEmptyProfile = this.isEmptyProfile(profile);
-    const timeElapsed = (Date.now() - startTime) / 1000;
+    const timeElapsed = Date.now() - startTime; // in milliseconds
     logger.debug(`🧐 [LinkedinProfileService] Linkedin profile retrieved: ${JSON.stringify(linkedinProfile)}`);
 
     return { linkedinProfile, isEmptyProfile, timeElapsed };
