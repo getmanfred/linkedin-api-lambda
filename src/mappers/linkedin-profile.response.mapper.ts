@@ -127,6 +127,7 @@ export class LinkedinProfileResponseMapper {
       if (educationItem['School Name']) {
         const institution = new LinkedinProfileResponseMacPublicEntity();
         institution.name = educationItem['School Name'];
+        study.institution = institution;
       }
       return study;
     });
