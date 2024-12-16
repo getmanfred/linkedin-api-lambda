@@ -34,7 +34,7 @@ export class Environment {
       this.AWS_REGION = env.AWS_REGION;
       this.AWS_SQS_ENDPOINT = env.AWS_SQS_ENDPOINT;
       this.AWS_QUEUE_URL = envName === 'pro' ? env.AWS_QUEUE_URL_PRO : env.AWS_QUEUE_URL_STAGE;
-      this.AWS_RESULT_QUEUE_URL = envName === 'pro' ? env.AWS_QUEUE_URL_PRO : env.AWS_RESULT_QUEUE_URL_STAGE;
+      this.AWS_RESULT_QUEUE_URL = envName === 'pro' ? env.AWS_RESULT_QUEUE_URL_PRO : env.AWS_RESULT_QUEUE_URL_STAGE;
     } catch (error: unknown) {
       throw new Error(`🔧 [Environment] Invalid environment variables: ${(error as Error)?.message}`);
     }
