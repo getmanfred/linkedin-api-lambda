@@ -43,12 +43,3 @@ Make sure you have all necessary environment variables and dependencies set up b
 # References
 
 - https://learn.microsoft.com/en-us/linkedin/dma/member-data-portability/member-data-portability-member
-
-# ⌛️ TODO: List
-
-- Core logic
-  - error handling, detect "empty" response (not yet connected)
-  - measure time and return to storage in DB for metabase stats
-  - more tests, integration test?
-- Send result to SQS queue
-- Script to get linkedin token
