@@ -1,4 +1,4 @@
-import { SendMessageCommand, SendMessageCommandInput, SQSClient } from '@aws-sdk/client-sqs';
+import { DeleteMessageCommand, SendMessageCommand, SendMessageCommandInput, SQSClient } from '@aws-sdk/client-sqs';
 import { v4 as uuid } from 'uuid';
 import { LinkedinProfileRequest } from '../contracts/linkedin-profile.request';
 import { LinkedinProfileResponse } from '../contracts/linkedin-profile.response';
@@ -40,8 +40,7 @@ export class QueueClient {
       MessageBody: JSON.stringify({ ...request, attempt }),
       QueueUrl: queueUrl,
       MessageGroupId: uuid(),
-      MessageDeduplicationId: uuid(),
-      DelaySeconds: 60 * attempt // 1-2-3 minutes
+      MessageDeduplicationId: uuid()
     };
 
     if (queueUrl) {
@@ -50,6 +49,20 @@ export class QueueClient {
       await messageClient.send(messageCommand);
     } else {
       logger.warn(`💌 [QueueClient] Sending message again to queue: no queue provided`, message);
+    }
+  }
+
+  public static async removeMessage(receiptHandle: string, environment: Environment): Promise<void> {
+    const queueUrl = environment.AWS_QUEUE_URL;
+    const region = environment.AWS_REGION;
+    const endpoint = environment.AWS_SQS_ENDPOINT;
+    const messageClient = new SQSClient({ region, endpoint });
+
+    if (queueUrl) {
+      logger.info(`💌 [QueueClient] Remove message with receiptHandle: ${receiptHandle} from queue: ${queueUrl}`);
+      await messageClient.send(new DeleteMessageCommand({ QueueUrl: queueUrl, ReceiptHandle: receiptHandle }));
+    } else {
+      logger.warn(`💌 [QueueClient] Remove message with receiptHandle: ${receiptHandle} from queue: no queue provided`);
     }
   }
 }

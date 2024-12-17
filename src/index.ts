@@ -13,6 +13,7 @@ import { logger } from './util/logger';
 export const handler: Handler = async (event: SQSEvent): Promise<LinkedinProfileResponse | undefined> => {
   const request = LinkedinProfileRequestMapper.toDomain(event);
   const env = Environment.setupEnvironment(request);
+  const receiptHandle = event.Records[0].receiptHandle;
 
   try {
     logger.info(`⌛️ [handler] Starting Linkedin profile request for linkedinProfileUrl: ${request.linkedinProfileUrl}`, request);
@@ -38,6 +39,7 @@ export const handler: Handler = async (event: SQSEvent): Promise<LinkedinProfile
     logger.error(`❌ [handler] Error processing Linkedin profile request`, { error, errorType, errorMessage, event });
     const result = LinkedinProfileResponseMapper.toErrorResponse(errorType, errorMessage, request);
     await QueueClient.sendToResultQueue(result, env);
+    await QueueClient.removeMessage(receiptHandle, env);
     throw error;
   }
 };

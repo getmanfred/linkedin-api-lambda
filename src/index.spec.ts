@@ -22,7 +22,8 @@ jest.mock('./services/linkedin-profile.service', () => ({
 jest.mock('./services/queue.client', () => ({
   QueueClient: {
     sendToResultQueue: jest.fn().mockResolvedValue(undefined),
-    resendMessage: jest.fn().mockResolvedValue(undefined)
+    resendMessage: jest.fn().mockResolvedValue(undefined),
+    removeMessage: jest.fn().mockResolvedValue(undefined)
   }
 }));
 

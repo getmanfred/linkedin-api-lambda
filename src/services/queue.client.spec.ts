@@ -44,6 +44,20 @@ describe('QueueClient', () => {
     );
   });
 
+  it('should remove a message from the queue', async () => {
+    const receiptHandle = 'fake-receipt-handle';
+    const spyDeleteMessageCommand = jest.spyOn(require('@aws-sdk/client-sqs'), 'DeleteMessageCommand');
+
+    await QueueClient.removeMessage(receiptHandle, mockEnvironment);
+
+    expect(spyDeleteMessageCommand).toHaveBeenCalledWith(
+      expect.objectContaining({
+        QueueUrl: mockEnvironment.AWS_QUEUE_URL,
+        ReceiptHandle: receiptHandle
+      })
+    );
+  });
+
   it('should resend a message to the queue', async () => {
     const request = createMockedLinkedinProfileRequest();
     const spySendMessageCommand = jest.spyOn(require('@aws-sdk/client-sqs'), 'SendMessageCommand');
@@ -55,8 +69,7 @@ describe('QueueClient', () => {
         MessageBody: JSON.stringify({ ...request, attempt: 2 }),
         QueueUrl: mockEnvironment.AWS_QUEUE_URL,
         MessageGroupId: expect.any(String),
-        MessageDeduplicationId: expect.any(String),
-        DelaySeconds: 120
+        MessageDeduplicationId: expect.any(String)
       })
     );
   });
