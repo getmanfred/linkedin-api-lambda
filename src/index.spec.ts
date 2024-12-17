@@ -149,5 +149,21 @@ describe('Linkedin lambda handler', () => {
       await expect(handler(event, {} as Context, () => {})).rejects.toThrow(new Error(expectedErrorString));
       expect(QueueClient.sendToResultQueue).toHaveBeenCalled();
     });
+
+    it('should handle unknown errors and send to result queue', async () => {
+      const event = createMockedSqsSEvent();
+
+      jest.spyOn(linkedinProfileService, 'getLinkedinProfile').mockRejectedValue(new Error());
+
+      await expect(handler(event, {} as Context, () => {})).rejects.toThrow();
+
+      expect(QueueClient.sendToResultQueue).toHaveBeenCalledWith(
+        expect.objectContaining({
+          errorType: 'unknown',
+          errorMessage: 'unknown error'
+        }),
+        expect.anything()
+      );
+    });
   });
 });

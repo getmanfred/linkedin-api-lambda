@@ -29,7 +29,7 @@ export class QueueClient {
   }
 
   public static async resendMessage(request: LinkedinProfileRequest, environment: Environment): Promise<void> {
-    const attempt = request.attempt++;
+    const attempt = request.attempt + 1;
 
     const queueUrl = environment.AWS_QUEUE_URL;
     const region = environment.AWS_REGION;
@@ -40,7 +40,8 @@ export class QueueClient {
       MessageBody: JSON.stringify({ ...request, attempt }),
       QueueUrl: queueUrl,
       MessageGroupId: uuid(),
-      MessageDeduplicationId: uuid()
+      MessageDeduplicationId: uuid(),
+      DelaySeconds: 60 * attempt // 1-2-3 minutes
     };
 
     if (queueUrl) {

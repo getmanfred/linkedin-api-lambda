@@ -7,5 +7,5 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   coverageReporters: ['lcov', 'text-summary', 'clover'],
-  collectCoverageFrom: ['src/**/*.ts', '!src/test/**/*', '!src/**/*spec.ts', '!src/launch.ts']
+  collectCoverageFrom: ['src/**/*.ts', '!src/test/**/*', '!src/**/*spec.ts', '!src/launch.ts', '!src/launch-sqs-consumer.ts']
 };

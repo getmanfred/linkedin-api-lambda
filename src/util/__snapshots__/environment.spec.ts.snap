@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Environment config should correctly load environment variables for "pro" environment and match snapshot 1`] = `
+Environment {
+  "AWS_QUEUE_URL": "https://sqs-pro.amazonaws.com/1234567890/pro-queue",
+  "AWS_REGION": "us-east-1",
+  "AWS_RESULT_QUEUE_URL": "https://sqs-pro.amazonaws.com/1234567890/pro-result-queue",
+  "AWS_SQS_ENDPOINT": "http://localhost:4566",
+  "LOCAL_LINKEDIN_API_TOKEN": "mock-api-token",
+  "LOGGER_CONSOLE": true,
+  "MAX_RETRIES": 5,
+}
+`;
+
+exports[`Environment config should correctly load environment variables for "stage" environment and match snapshot 1`] = `
+Environment {
+  "AWS_QUEUE_URL": "https://sqs-stage.amazonaws.com/1234567890/stage-queue",
+  "AWS_REGION": "us-east-1",
+  "AWS_RESULT_QUEUE_URL": "https://sqs-stage.amazonaws.com/1234567890/stage-result-queue",
+  "AWS_SQS_ENDPOINT": "http://localhost:4566",
+  "LOCAL_LINKEDIN_API_TOKEN": "mock-api-token",
+  "LOGGER_CONSOLE": true,
+  "MAX_RETRIES": 5,
+}
+`;
+
+exports[`Environment config should throw an error when environment variables are invalid 1`] = `"🔧 [Environment] Invalid environment variables: process.exit called"`;
