@@ -16,18 +16,18 @@ export const handler: Handler = async (event: SQSEvent): Promise<LinkedinProfile
   const receiptHandle = event.Records[0].receiptHandle;
 
   try {
-    logger.info(`⌛️ [handler] Starting Linkedin profile request for linkedinProfileUrl: ${request.linkedinProfileUrl}`, request);
+    logger.info(`⌛️ [handler] Starting Linkedin profile request for linkedinProfileUrl: ${request.linkedinProfileUrl}`);
 
     const { linkedinProfile, isEmptyProfile, timeElapsed } = await new LinkedinProfileService().getLinkedinProfile(request.linkedinApiToken);
 
     if (!isEmptyProfile && linkedinProfile) {
       const linkedinProfileResponse = LinkedinProfileResponseMapper.toResponse(linkedinProfile, request, timeElapsed);
-      logger.info(`✅ [handler] Linkedin profile response with MAC: ${JSON.stringify(linkedinProfileResponse.profile)}`, request);
+      logger.info(`✅ [handler] Linkedin profile response with MAC: ${JSON.stringify(linkedinProfileResponse.profile)}`);
       await QueueClient.sendToResultQueue(linkedinProfileResponse, env);
       return linkedinProfileResponse;
     }
 
-    logger.warn(`👻 [handler] Linkedin profile is not synced for linkedinProfileUrl: ${request.linkedinProfileUrl}`, request);
+    logger.warn(`👻 [handler] Linkedin profile is not synced for linkedinProfileUrl: ${request.linkedinProfileUrl}`);
     if (request.attempt >= env.MAX_RETRIES) throw new MaxRetriesError(`Max attempts reached for Linkedin profile request: ${env.MAX_RETRIES}`);
     await QueueClient.resendMessage(request, env);
 
