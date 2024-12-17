@@ -33,7 +33,7 @@ export const handler: Handler = async (event: SQSEvent): Promise<LinkedinProfile
     return undefined;
   } catch (error: unknown) {
     const errorType = error instanceof MaxRetriesError ? 'expired' : error instanceof InvalidMacError ? 'invalid-mac' : 'unknown';
-    const errorMessage = error instanceof Error ? error.message : 'unknown error';
+    const errorMessage = (error as Error)?.message || 'unknown error';
 
     logger.error(`❌ [handler] Error processing Linkedin profile request`, { error, errorType, errorMessage, event });
     const result = LinkedinProfileResponseMapper.toErrorResponse(errorType, errorMessage, request);

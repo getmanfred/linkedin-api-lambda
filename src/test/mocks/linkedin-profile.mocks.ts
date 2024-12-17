@@ -1,4 +1,5 @@
 import { LinkedinProfileRequest } from '../../contracts/linkedin-profile.request';
+import { LinkedinProfileResponse, LinkedinProfileResponseMac } from '../../contracts/linkedin-profile.response';
 import { LinkedinProfile } from '../../domain/linkedin-profile';
 
 export const createMockedLinkedinProfileRequest = (customValues: Partial<LinkedinProfileRequest> = {}): LinkedinProfileRequest => {
@@ -51,4 +52,31 @@ export const createMockedLinkedinProfile = (customValues: Partial<LinkedinProfil
 export const createMockedLinkedinProfileEmpty = (): LinkedinProfile => {
   const profile = new LinkedinProfile();
   return profile;
+};
+
+export const createMockedLinkedinProfileResponseMac = (customValues: Partial<LinkedinProfileResponseMac> = {}): LinkedinProfileResponseMac => {
+  const mac = new LinkedinProfileResponseMac();
+  mac.$schema = customValues.$schema ?? 'https://raw.githubusercontent.com/getmanfred/mac/v0.5/schema/schema.json';
+  mac.settings = customValues.settings ?? { language: 'EN' };
+  mac.aboutMe = customValues.aboutMe ?? {
+    profile: {
+      name: 'Pedro',
+      surnames: 'Manfredo',
+      title: 'Software Engineer @Manfred',
+      description: 'I like to learn new things every day'
+    }
+  };
+  mac.experience = customValues.experience ?? {};
+  mac.knowledge = customValues.knowledge ?? {};
+  return mac;
+};
+
+export const createMockedLinkedinProfileResponse = (customValues: Partial<LinkedinProfileResponse> = {}): LinkedinProfileResponse => {
+  const response = new LinkedinProfileResponse();
+  response.importId = customValues.importId ?? '1';
+  response.contextId = customValues.contextId ?? '1234';
+  response.profileId = customValues.profileId ?? 356;
+  response.timeElapsed = customValues.timeElapsed ?? 1000;
+  response.profile = customValues.profile ?? createMockedLinkedinProfileResponseMac();
+  return response;
 };
