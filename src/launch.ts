@@ -5,7 +5,9 @@ import { createMockedLinkedinProfileRequest } from './test/mocks/linkedin-profil
 import { createMockedSqsSEvent } from './test/mocks/sqs.mocks';
 import { logger } from './util/logger';
 
-// 👉 Fake manual execution without AWS: For local debug
+/**
+ *  👉  Script: Fake manual execution without AWS: For local debug
+ */
 void (async (): Promise<void> => {
   const linkedinApiToken = process.env['LOCAL_LINKEDIN_API_TOKEN'];
   const request = createMockedLinkedinProfileRequest({ linkedinApiToken });
