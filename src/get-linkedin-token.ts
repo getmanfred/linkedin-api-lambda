@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-process-env */
 /* eslint-disable no-console */
 import axios from 'axios';
+
+// @ts-expect-error
+import betterOpn from 'better-opn';
 import { createServer } from 'http';
-import open from 'open';
 
 /**
  *  👉 Script: Retrieves Linkedin API token for local testing (LOCAL_LINKEDIN_API_TOKEN environment variable value)
@@ -16,7 +19,7 @@ const REDIRECT_URI = 'http://localhost:3000/callback';
 const startOAuthFlow = async (): Promise<void> => {
   const authUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${SCOPE}`;
   console.log('👉 Opening LinkedIn OAuth URL...');
-  await open(authUrl);
+  await betterOpn(authUrl);
 };
 
 // Create a simple server to handle the LinkedIn redirect
