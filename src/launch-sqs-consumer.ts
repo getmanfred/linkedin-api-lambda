@@ -6,7 +6,7 @@ import { handler } from './index';
 import { logger } from './util/logger';
 
 /**
- * Test the SQS consumer locally using LocalStack queues
+ *  👉  Script: Test the SQS consumer locally using LocalStack queues
  */
 const sqsClient = new SQSClient({ region: 'eu-west-1', endpoint: 'http://localhost:4566' });
 
