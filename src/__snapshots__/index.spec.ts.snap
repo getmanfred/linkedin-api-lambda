@@ -66,3 +66,70 @@ LinkedinProfileResponse {
   "timeElapsed": 1000,
 }
 `;
+
+exports[`Linkedin lambda handler when handling a successful request should return a response with Linkedin Profile as Mac Profile removing duplicates 1`] = `
+LinkedinProfileResponse {
+  "contextId": "1234",
+  "importId": "1",
+  "profile": LinkedinProfileResponseMac {
+    "$schema": "https://raw.githubusercontent.com/getmanfred/mac/v0.5/schema/schema.json",
+    "aboutMe": LinkedinProfileResponseMacAboutMe {
+      "profile": LinkedinProfileResponseMacPerson {
+        "description": "I like to learn new things every day",
+        "name": "",
+        "surnames": "",
+        "title": "Software Engineer @Manfred",
+      },
+    },
+    "experience": LinkedinProfileResponseMacExperience {
+      "jobs": [
+        LinkedinProfileResponseMacJob {
+          "organization": LinkedinProfileResponseMacPublicEntity {
+            "name": "Manfred",
+          },
+          "roles": [
+            LinkedinProfileResponseMacJobRole {
+              "challenges": [
+                LinkedinProfileResponseMacExperienceJobChallenge {
+                  "description": "Product development implemented in Node, Express, Nest.js, Typescript, Postgres, Kubernetes, AWS: SQS, Lambda, S3...",
+                },
+              ],
+              "finishDate": "2026-03-01",
+              "name": "Senior Backend Developer",
+              "startDate": "2022-03-01",
+            },
+          ],
+        },
+      ],
+    },
+    "knowledge": LinkedinProfileResponseMacKnowledge {
+      "hardSkills": [
+        LinkedinProfileResponseMacSkill {
+          "skill": LinkedinProfileResponseMacCompetence {
+            "name": "TypeScript",
+            "type": "technology",
+          },
+        },
+      ],
+      "studies": [
+        LinkedinProfileResponseMacStudy {
+          "degreeAchieved": true,
+          "description": "Computer Engineering",
+          "finishDate": "2012-01-01",
+          "institution": LinkedinProfileResponseMacPublicEntity {
+            "name": "University of A Coruna",
+          },
+          "name": "Computer Engineering",
+          "startDate": "2005-01-01",
+          "studyType": "officialDegree",
+        },
+      ],
+    },
+    "settings": LinkedinProfileResponseMacSettings {
+      "language": "EN",
+    },
+  },
+  "profileId": 356,
+  "timeElapsed": 1000,
+}
+`;
