@@ -80,27 +80,21 @@ export class LinkedinProfileResponseMapper {
 
   private static toExperience(positions: LinkedinProfilePosition[]): LinkedinProfileResponseMacExperience {
     const experience = new LinkedinProfileResponseMacExperience();
-    experience.jobs = positions.map((position) => {
-      {
-        const job = new LinkedinProfileResponseMacJob();
-        const organization = new LinkedinProfileResponseMacPublicEntity();
-        organization.name = position['Company Name'] || '';
-        job.organization = organization;
+    experience.jobs = [];
 
-        const role = new LinkedinProfileResponseMacJobRole();
-        role.name = position.Title || '';
-        role.startDate = DateUtilities.toIsoDate(position['Started On']);
-        role.finishDate = position['Finished On'] ? DateUtilities.toIsoDate(position['Finished On']) : undefined;
+    for (const position of positions) {
+      const job = this.toPosition(position);
 
-        const challenge = new LinkedinProfileResponseMacExperienceJobChallenge();
-        challenge.description = position.Description || '';
-        role.challenges = [challenge];
+      const isDuplicate = experience.jobs.some(
+        (existingJob) =>
+          existingJob.organization.name === job.organization.name &&
+          existingJob.roles[0].name === job.roles[0].name &&
+          existingJob.roles[0].startDate === job.roles[0].startDate &&
+          existingJob.roles[0].finishDate === job.roles[0].finishDate
+      );
 
-        job.roles = [role];
-
-        return job;
-      }
-    });
+      if (!isDuplicate) experience.jobs.push(job);
+    }
     return experience;
   }
 
@@ -116,21 +110,20 @@ export class LinkedinProfileResponseMapper {
       return skill;
     });
 
-    knowledge.studies = education.map((educationItem) => {
-      const study = new LinkedinProfileResponseMacStudy();
-      study.studyType = 'officialDegree';
-      study.name = educationItem['Degree Name'] || educationItem['School Name'] || '';
-      study.startDate = DateUtilities.toIsoDate(educationItem['Start Date']);
-      study.finishDate = educationItem['End Date'] ? DateUtilities.toIsoDate(educationItem['End Date']) : undefined;
-      study.degreeAchieved = !!educationItem['End Date'];
-      study.description = educationItem['Degree Name'] || educationItem['School Name'];
-      if (educationItem['School Name']) {
-        const institution = new LinkedinProfileResponseMacPublicEntity();
-        institution.name = educationItem['School Name'];
-        study.institution = institution;
-      }
-      return study;
-    });
+    knowledge.studies = [];
+
+    for (const educationItem of education) {
+      const study = this.toStudy(educationItem);
+      const isDuplicate = knowledge.studies.some(
+        (existingStudy) =>
+          existingStudy.name === study.name &&
+          existingStudy.startDate === study.startDate &&
+          existingStudy.finishDate === study.finishDate &&
+          existingStudy.degreeAchieved === study.degreeAchieved
+      );
+
+      if (!isDuplicate) knowledge.studies.push(study);
+    }
     return knowledge;
   }
 
@@ -141,5 +134,41 @@ export class LinkedinProfileResponseMapper {
       const formattedErrors = ValidationUtilities.formatErrors(errors);
       throw new InvalidMacError(`[LinkedinProfileResponseMapper] MAC Validation failed: ${JSON.stringify(formattedErrors)}`);
     }
+  }
+
+  private static toPosition(position: LinkedinProfilePosition): LinkedinProfileResponseMacJob {
+    const job = new LinkedinProfileResponseMacJob();
+    const organization = new LinkedinProfileResponseMacPublicEntity();
+    organization.name = position['Company Name'] || '';
+    job.organization = organization;
+
+    const role = new LinkedinProfileResponseMacJobRole();
+    role.name = position.Title || '';
+    role.startDate = DateUtilities.toIsoDate(position['Started On']);
+    role.finishDate = position['Finished On'] ? DateUtilities.toIsoDate(position['Finished On']) : undefined;
+
+    const challenge = new LinkedinProfileResponseMacExperienceJobChallenge();
+    challenge.description = position.Description || '';
+    role.challenges = [challenge];
+
+    job.roles = [role];
+
+    return job;
+  }
+
+  private static toStudy(educationItem: LinkedinProfileEducation): LinkedinProfileResponseMacStudy {
+    const study = new LinkedinProfileResponseMacStudy();
+    study.studyType = 'officialDegree';
+    study.name = educationItem['Degree Name'] || educationItem['School Name'] || '';
+    study.startDate = DateUtilities.toIsoDate(educationItem['Start Date']);
+    study.finishDate = educationItem['End Date'] ? DateUtilities.toIsoDate(educationItem['End Date']) : undefined;
+    study.degreeAchieved = !!educationItem['End Date'];
+    study.description = educationItem['Degree Name'] || educationItem['School Name'];
+    if (educationItem['School Name']) {
+      const institution = new LinkedinProfileResponseMacPublicEntity();
+      institution.name = educationItem['School Name'];
+      study.institution = institution;
+    }
+    return study;
   }
 }

@@ -52,6 +52,23 @@ describe('Linkedin lambda handler', () => {
       expect(response).toMatchSnapshot();
     });
 
+    it('should return a response with Linkedin Profile as Mac Profile removing duplicates', async () => {
+      const event = createMockedSqsSEvent();
+      const expectedLinkedinProfile = createMockedLinkedinProfile();
+      expectedLinkedinProfile.education = expectedLinkedinProfile.education.concat(expectedLinkedinProfile.education);
+      expectedLinkedinProfile.positions = expectedLinkedinProfile.positions.concat(expectedLinkedinProfile.positions);
+
+      linkedinProfileService.getLinkedinProfile.calledWith('fake-token').mockResolvedValue({
+        linkedinProfile: expectedLinkedinProfile,
+        isEmptyProfile: false,
+        timeElapsed: 1000
+      });
+
+      const response = await handler(event, {} as Context, () => {});
+
+      expect(response).toMatchSnapshot();
+    });
+
     it('should send response to sqs result queue ', async () => {
       const event = createMockedSqsSEvent();
       const expectedLinkedinProfile = createMockedLinkedinProfile();
